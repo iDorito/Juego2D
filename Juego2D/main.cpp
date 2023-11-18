@@ -7,47 +7,65 @@ using namespace sf;
 
 int main() {
 
-	/*----------------------INITIALIZATION-----------------------*/
+	/*----------------------INITIALIZATION-START-----------------------*/
 	/*Settings*/
 	ContextSettings settings;
 	settings.antialiasingLevel = 8;
 
 	/*Window*/
-	int windowWidth = 1920;
-	int windowHeight = 1080;
+	int windowWidth = 800;
+	int windowHeight = 600;
 	RenderWindow window(VideoMode(windowWidth, windowHeight), "Juego RPG", Style::Default, settings);
 
-	/*CircleShape*/
-	sf::CircleShape circulo(50.f, 10);
-	circulo.setFillColor(Color(255, 0, 255));
-	circulo.setPosition(windowWidth / 2 - (circulo.getRadius()), windowHeight / 2 - (circulo.getRadius()));
-	circulo.setOutlineThickness(5);
-	circulo.setOutlineColor(Color::Cyan);
+	/*----------------------LOAD-START-----------------------*/
+	Texture playerTexture;
+	Sprite playerSprite;
+	int xIndex = 0;
+	int yIndex = 0;
 
-	/*Rectangle*/
-	RectangleShape rectangulo(sf::Vector2f(50, 4));
-	rectangulo.setPosition(50, 50);
-	rectangulo.setOutlineThickness(5);
-	rectangulo.setOutlineColor(Color::Green);
+	if (playerTexture.loadFromFile("Assets/Player/Textures/spritesheet.png")) {
+		cout << "Player texture loaded.";
+		playerSprite.setTexture(playerTexture);
+		playerSprite.setTextureRect(IntRect(xIndex * 64, yIndex * 64, 64, 64));
+	}
+	else {
+		cout << "Player texture failed to load...";
+	}
+	
 
-	/*----------------------INITIALIZATION-----------------------*/
+	/*----------------------LOAD-END-----------------------*/
 
 	//Main game loop
 	while (window.isOpen()) {
 		/*-----------------------Update-----------------------*/
 		Event event;
 
-		while (window.pollEvent(event)) {
+		while (window.pollEvent(event)) {	
 			if (event.type == Event::Closed) {
 				window.close();
 			}
 		}
+
+		Vector2f position = playerSprite.getPosition();
+
+		if (Keyboard::isKeyPressed(Keyboard::W)) {
+			playerSprite.setPosition(position - Vector2f(0, 0.2));
+		}
+		if (Keyboard::isKeyPressed(Keyboard::A)) {
+			playerSprite.setPosition(position - Vector2f(0.2, 0));
+		}
+		if (Keyboard::isKeyPressed(Keyboard::S)) {
+			playerSprite.setPosition(position + Vector2f(0, 0.2));
+		}
+		if (Keyboard::isKeyPressed(Keyboard::D)) {
+			playerSprite.setPosition(position + Vector2f(0.2, 0));
+		}
+
 		/*-----------------------Update-----------------------*/
 
 		/*-----------------------Draw-----------------------*/
 		window.clear(Color::Black);
-		window.draw(circulo);
-		window.draw(rectangulo);
+		window.draw(playerSprite);
 		window.display();
 		/*-----------------------Draw-----------------------*/
 	}

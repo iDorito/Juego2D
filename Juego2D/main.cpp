@@ -1,9 +1,8 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include <vector>
+#include <windows.h>
 #include <math.h>
-#include "Player.h"
-#include "Enemy.h"
 
 sf::Vector2f NormalizeVector(sf::Vector2f vector) {
 
@@ -14,6 +13,7 @@ sf::Vector2f NormalizeVector(sf::Vector2f vector) {
 	normalizedVector.y = vector.y / m;
 
 	return normalizedVector;
+
 }
 
 int main() {
@@ -24,14 +24,8 @@ int main() {
 
 	/*Window*/
 	int windowWidth = 1920, windowHeight = 1080;
-	sf::RenderWindow window(sf::VideoMode(windowWidth, windowHeight), "Juego RPG", sf::Style::Default, settings);
+	sf::RenderWindow window(sf::VideoMode(windowWidth, windowHeight), "Juego RPG", sf::Style::Fullscreen, settings);
 	/*----------------------INITIALIZATION-END-----------------------*/
-
-	Player player;
-	player.Initialize();
-
-	Enemy skeleton;
-	skeleton.Initialize();
 
 	std::vector<sf::CircleShape> bullets;
 	bullets.reserve(100);
@@ -40,12 +34,48 @@ int main() {
 
 	//Mouse
 	sf::Vector2f mousePos = sf::Vector2f(sf::Mouse::getPosition(window));
+	
 
 	/*----------------------LOAD-START-----------------------*/
-	player.Load();
-	skeleton.Load();
+
+	/*ENEMY-----------------------*/
+	sf::Texture enemyTexture;
+	sf::Sprite  enemySprite; 
+
+	if (enemyTexture.loadFromFile("Assets/Skeleton/Textures/spritesheet.png")) {
+		int xIndex = 0;
+		int yIndex = 2;
+		std::cout << "Enemy texture loaded." << std::endl;
+		enemySprite.setTexture(enemyTexture);
+		enemySprite.setTextureRect(sf::IntRect(xIndex * 64, yIndex * 64, 64, 64));
+		enemySprite.scale(sf::Vector2f(3.0, 3.0));
+		enemySprite.setPosition(sf::Vector2f(850, 50.0)); 
+	}
+	else {
+		std::cout << "Failed to load enemy." << std::endl;
+	}
+
+	/*PLAYER-----------------------*/
+	sf::Texture playerTexture;
+	sf::Sprite playerSprite;
+
+	if (playerTexture.loadFromFile("Assets/Player/Textures/spritesheet.png")) {
+		int xIndex = 0;
+		int yIndex = 0;
+		std::cout << "Player texture loaded." << std::endl;
+		playerSprite.setTexture(playerTexture);
+		playerSprite.setTextureRect(sf::IntRect(xIndex * 64, yIndex * 64, 64, 64));
+		playerSprite.scale(sf::Vector2f(3.0, 3.0));
+	}
+	else {
+		std::cout << "Player texture failed to load..." << std::endl;
+	}
 	
+
 	/*----------------------LOAD-END-----------------------*/
+
+	/*BULLET DIRECTION-----------------------*/
+	
 
 	//Main game loop
 	while (window.isOpen()) {
@@ -56,31 +86,43 @@ int main() {
 			if (event.type == sf::Event::Closed) {
 				window.close();
 			}
+			
 		}
-		player.Update();
-		skeleton.Update();
-		
+
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
+			playerSprite.setPosition(playerSprite.getPosition() - sf::Vector2f(0, 0.1));
+		}
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
+			playerSprite.setPosition(playerSprite.getPosition() - sf::Vector2f(0.1, 0));
+		}
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) {
+			playerSprite.setPosition(playerSprite.getPosition() + sf::Vector2f(0, 0.1));
+		}
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
+			playerSprite.setPosition(playerSprite.getPosition() + sf::Vector2f(0.1, 0));
+		}
+
 		if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
 			bullets.push_back(sf::CircleShape(15.0f));
 
 			int i = bullets.size() - 1;
-			bullets[i].setPosition(player.getPosition());
-			std::cout << "Bullet number: " << i << " has been created." << std::endl;
+			bullets[i].setPosition(playerSprite.getPosition());
 		}
 
 		for (int i{ 0 }; i < bullets.size(); i++) {
-			sf::Vector2f bulletDirection = skeleton.getPosition() - bullets[i].getPosition();
+			sf::Vector2f bulletDirection = enemySprite.getPosition() - bullets[i].getPosition();
 			bulletDirection = NormalizeVector(bulletDirection);
 			bullets[i].setPosition(bullets[i].getPosition() + bulletDirection * bulletSpeed);
 		}
+
+		
+
 		/*-----------------------Update-----------------------*/
 
 		/*-----------------------Draw-----------------------*/
 		window.clear(sf::Color::Black);
-
-		player.Draw(window);
-
-		window.draw(skeleton.getSprite());
+		window.draw(playerSprite);
+		window.draw(enemySprite);
 
 		for (int i{ 0 }; i < bullets.size(); i++) {
 			window.draw(bullets[i]);

@@ -25,8 +25,9 @@ void Enemy::Update()
 {
 }
 
-void Enemy::Draw()
+void Enemy::Draw(sf::RenderWindow& window)
 {
+	window.draw(sprite);
 }
 
 sf::Vector2f Enemy::getPosition()

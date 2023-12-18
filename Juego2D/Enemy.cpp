@@ -8,6 +8,9 @@ void Enemy::Initialize()
 	boundingBox.setOutlineThickness(1);
 
 	size = sf::Vector2i(64, 64);
+
+	health = 100;
+	v_health.setString(std::to_string(health));
 }
 
 void Enemy::Load()
@@ -24,19 +27,34 @@ void Enemy::Load()
 	else {
 		std::cout << "Failed to load enemy." << std::endl;
 	}
-	boundingBox.setSize(
-		sf::Vector2f(size.x * sprite.getScale().x, size.y * sprite.getScale().y));
+
+	boundingBox.setSize(sf::Vector2f(size.x * sprite.getScale().x, size.y * sprite.getScale().y));
+
+	if (font.loadFromFile("Assets/Fonts/arial.ttf")) {
+		std::cout << "Arial.ttf - Font loaded!" << std::endl;
+		v_health.setFont(font);
+	}
+	else {
+		std::cout << "Font couldn't load..." << std::endl;
+	}
 }
 
-void Enemy::Update(double &deltaTime)
+void Enemy::Update(float& deltaTime)
 {
-	boundingBox.setPosition(getPosition());
+	if (health > 0) {
+		v_health.setPosition(getPosition() + sf::Vector2f(64.0f, 0.0f));
+		boundingBox.setPosition(getPosition());
+	}
 }
 
 void Enemy::Draw(sf::RenderWindow& window)
 {
-	window.draw(sprite);
-	window.draw(boundingBox);
+	if (health > 0) {
+		window.draw(sprite);
+		window.draw(boundingBox);
+		window.draw(v_health);
+	}
+	
 }
 
 sf::Vector2f Enemy::getPosition()
@@ -48,4 +66,22 @@ sf::Vector2f Enemy::getPosition()
 sf::Sprite Enemy::getSprite()
 {
 	return sprite;
+}
+
+int Enemy::getHealth()
+{
+	return health;
+}
+
+void Enemy::reduceHealth(int dmg)
+{
+	if (health >= dmg) {
+		health -= dmg;
+		v_health.setString(std::to_string(health));
+	}
+	else {
+		v_health.setString("Muerto");
+	}
+
+	std::cout << std::to_string(health) << std::endl;
 }

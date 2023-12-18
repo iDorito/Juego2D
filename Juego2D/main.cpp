@@ -4,6 +4,7 @@
 #include "Enemy.h"
 #include "Gmath.h"
 #include "Ginfo.h"
+#include "Bullet.h"
 
 int main() {
 	/*----------------------INITIALIZATION-START---------------------*/
@@ -16,6 +17,10 @@ int main() {
 	sf::RenderWindow window(sf::VideoMode(windowWidth, windowHeight), "Juego RPG", sf::Style::Default, settings);
 	window.setFramerateLimit(240);
 	/*----------------------INITIALIZATION-END-----------------------*/
+	sf::Mouse mouse;
+
+	Bullet bullet;
+	bullet.Initialize();
 
 	Ginfo frameRate;
 	frameRate.Initialize();
@@ -30,6 +35,7 @@ int main() {
 	frameRate.Load();
 	
 	player.Load();
+	bullet.Load();
 	skeleton.Load();
 	/*----------------------LOAD-END--------------------------------*/
 
@@ -47,16 +53,18 @@ int main() {
 			}
 		}
 
+		sf::Vector2f mousePos = sf::Vector2f(mouse.getPosition());
+
 		sf::Time deltaTimeCounter = clock.restart();
-		double deltaTime = deltaTimeCounter.asMicroseconds() / 1000.0f;
+		float deltaTime = deltaTimeCounter.asMicroseconds() / 1000.0f;
 
 		//FPS Counter-----
 		frameRate.Update(deltaTime);
 		//FPS Counter-----
 
-		sf::Vector2f mousePos = sf::Vector2f(sf::Mouse::getPosition(window));
 		skeleton.Update(deltaTime);
-		player.Update(deltaTime, skeleton);
+		player.Update(deltaTime, skeleton, mousePos);
+		bullet.Update(deltaTime, skeleton, mousePos, player);
 		
 		/*-----------------------Update-----------------------*/
 
@@ -64,6 +72,7 @@ int main() {
 		window.clear(sf::Color::Black);
 
 		player.Draw(window);
+		bullet.Draw(window);
 		skeleton.Draw(window);
 		frameRate.Draw(window);
 

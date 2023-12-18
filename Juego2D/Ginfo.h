@@ -11,7 +11,7 @@ private:
 public:
 	void Initialize(); // <-- Called once
 	void Load(); // <-- Called once per app start
-	void Update(const double &deltaTime); // <-- Called once per frame
+	void Update(const float &deltaTime); // <-- Called once per frame
 	void Draw(sf::RenderWindow& window);
 
 	Ginfo();

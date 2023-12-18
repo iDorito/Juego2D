@@ -4,19 +4,27 @@
 class Enemy
 {
 private:
+	int health;
+	sf::Text v_health;
+
+	sf::Font font;
+
 	sf::Texture texture;
 	sf::Sprite sprite;
+	sf::Vector2i size;
 
 	sf::RectangleShape boundingBox;
-
-	sf::Vector2i size;
 public:
 	void Initialize(); // <-- Called once
 	void Load(); // <-- Called once per app start
-	void Update(double &deltaTime); // <-- Called once per frame
+	void Update(float&deltaTime); // <-- Called once per frame
 	void Draw(sf::RenderWindow& window); // <-- Called once once per frame
 
 	sf::Vector2f getPosition();
 	sf::Sprite getSprite();
+	int getHealth();
+
+	void reduceHealth(int dmg);
+
 };
 

@@ -27,7 +27,7 @@ void Ginfo::Load()
 	}
 }
 
-void Ginfo::Update(const double &deltaTime)
+void Ginfo::Update(const float &deltaTime)
 {
 	timer += deltaTime;
 
@@ -36,7 +36,6 @@ void Ginfo::Update(const double &deltaTime)
 		text.setString("fps" + std::to_string((int)result) + " time: " + std::to_string(deltaTime) + "ms");
 		timer = 0;
 	}
-	
 }
 
 void Ginfo::Draw(sf::RenderWindow& window)

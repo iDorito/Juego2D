@@ -3,12 +3,9 @@
 #include "Gmath.h"
 
 Player::Player() :
-	bulletSpeed{ 1.0f }, playerSpeed{ 2.0f }
-{}
+	playerSpeed{ 1.0f } {}
 
-Player::~Player()
-{}
-
+Player::~Player() {}
 
 void Player::Initialize()
 {
@@ -17,8 +14,7 @@ void Player::Initialize()
 	boundingBox.setOutlineThickness(1);
 
 	size = sf::Vector2i(64, 64);
-
-	}
+}
 
 void Player::Load()
 {
@@ -34,63 +30,43 @@ void Player::Load()
 	else {
 		std::cout << "Player texture failed to load..." << std::endl;
 	}
+
 	boundingBox.setSize(sf::Vector2f(size.x * sprite.getScale().x, size.y * sprite.getScale().y));
 }
 
-void Player::Update(const float &deltaTime, Enemy &skeleton)
+void Player::Update(const float &deltaTime, Enemy &skeleton, sf::Vector2f &mousePos)
 {
 	//sf::Vector2f position = getPosition();
 
+	//--------------------------------------MOVEMENT--------------------------------------//
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
-		sprite.setPosition(getPosition() - sf::Vector2f(0, 0.1) * playerSpeed * deltaTime);
+		sprite.setPosition(getPosition() - sf::Vector2f(0, 1) * playerSpeed * deltaTime / 2.0f);
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
-		sprite.setPosition(getPosition() - sf::Vector2f(0.1, 0) * playerSpeed * deltaTime);
+		sprite.setPosition(getPosition() - sf::Vector2f(1, 0) * playerSpeed * deltaTime / 2.0f);
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) {
-		sprite.setPosition(getPosition() + sf::Vector2f(0, 0.1) * playerSpeed * deltaTime);
+		sprite.setPosition(getPosition() + sf::Vector2f(0, 1) * playerSpeed * deltaTime / 2.0f);
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
-		sprite.setPosition(getPosition() + sf::Vector2f(0.1, 0) * playerSpeed * deltaTime);
+		sprite.setPosition(getPosition() + sf::Vector2f(1, 0) * playerSpeed * deltaTime / 2.0f);
 	}
+	//--------------------------------------MOVEMENT--------------------------------------//
 
-	gunTimer += deltaTime;
-
-	if (gunTimer >= ( 1000.0f / fireSpeed )) {
-		if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
-			bullets.push_back(sf::CircleShape(15.0f));
-
-			int i = bullets.size() - 1;
-			bullets[i].setPosition(getPosition());
-			bullets[i].setOutlineColor(sf::Color::Magenta);
-			bullets[i].setOutlineThickness(2);
-			std::cout << "Bullet number: " << i << " has been created." << std::endl;
-
-			gunTimer = 0;
-		}
-	}
-	for (int i{ 0 }; i < bullets.size(); i++) {
-		sf::Vector2f bulletDirection = skeleton.getPosition() - bullets[i].getPosition();
-		bulletDirection = Gmath::NormalizeVector(bulletDirection);
-		bullets[i].setPosition(bullets[i].getPosition() + bulletDirection * bulletSpeed * deltaTime);
-	}
-
+	//-----------------------------------AABB--------------------------------------
 	boundingBox.setPosition(getPosition());
-
 	if (Gmath::CheckBoxCollition(sprite.getGlobalBounds(), skeleton.getSprite().getGlobalBounds()))
 	{
 		std::cout << "Collition" << std::endl;
 	}
+	//-----------------------------------AABB--------------------------------------
 }
 
 void Player::Draw(sf::RenderWindow &window)
 {
+
 	window.draw(getSprite());
 	window.draw(boundingBox);
-
-	for (int i{ 0 }; i < bullets.size(); i++) {
-		window.draw(bullets[i]);
-	}
 }
 
 sf::Vector2f Player::getPosition()

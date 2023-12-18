@@ -1,6 +1,8 @@
 #include <SFML/Graphics.hpp>
+#include <iostream>
 #include "Player.h"
 #include "Enemy.h"
+#include "Gmath.h"
 
 int main() {
 	/*----------------------INITIALIZATION-START---------------------*/
@@ -11,6 +13,7 @@ int main() {
 	/*Window*/
 	int windowWidth = 1920, windowHeight = 1080;
 	sf::RenderWindow window(sf::VideoMode(windowWidth, windowHeight), "Juego RPG", sf::Style::Default, settings);
+	window.setFramerateLimit(240);
 	/*----------------------INITIALIZATION-END-----------------------*/
 
 	Player player;
@@ -19,17 +22,21 @@ int main() {
 	Enemy skeleton;
 	skeleton.Initialize();
 
-	//Mouse------------------------------------------------------------
-	sf::Vector2f mousePos = sf::Vector2f(sf::Mouse::getPosition(window));
-
 	/*----------------------LOAD-START------------------------------*/
 	player.Load();
 	skeleton.Load();
 	
 	/*----------------------LOAD-END--------------------------------*/
 
-	//Main game loop
+	//----------------------Main game loop--------------------------
+	sf::Clock clock;
+
 	while (window.isOpen()) {
+
+		sf::Time deltaTimeCounter = clock.restart();
+		float deltaTime = deltaTimeCounter.asMilliseconds();
+		std::cout << deltaTime << "ms" << std::endl;
+
 		/*-----------------------Update-----------------------------*/
 		sf::Event event;
 
@@ -38,8 +45,10 @@ int main() {
 				window.close();
 			}
 		}
-		skeleton.Update();
-		player.Update(skeleton);
+
+		sf::Vector2f mousePos = sf::Vector2f(sf::Mouse::getPosition(window));
+		skeleton.Update(deltaTime);
+		player.Update(deltaTime, skeleton);
 		
 		/*-----------------------Update-----------------------*/
 
@@ -52,6 +61,5 @@ int main() {
 		window.display();
 		/*-----------------------Draw-----------------------*/
 	}
-
 	return 0;
 }

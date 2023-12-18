@@ -7,12 +7,18 @@ class Player
 private:
 	sf::Texture texture;
 	sf::Sprite sprite;
+
 	std::vector<sf::CircleShape> bullets;
-	float bulletSpeed = 5.0f;
+	float bulletSpeed = 2.0f;
+	float playerSpeed = 2.0f;
+
+	sf::RectangleShape boundingBox;
+	
+	sf::Vector2i size;
 public:
 	void Initialize(); // <-- Called once
 	void Load(); // <-- Called once per app start
-	void Update(Enemy& skeleton); // <-- Called once per frame
+	void Update(float deltaTime, Enemy& skeleton); // <-- Called once per frame
 	void Draw(sf::RenderWindow &window); // <-- Called once once per frame
 
 	sf::Vector2f getPosition();

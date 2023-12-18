@@ -13,7 +13,7 @@ private:
 public:
 	void Initialize(); // <-- Called once
 	void Load(); // <-- Called once per app start
-	void Update(float deltaTime); // <-- Called once per frame
+	void Update(double &deltaTime); // <-- Called once per frame
 	void Draw(sf::RenderWindow& window); // <-- Called once once per frame
 
 	sf::Vector2f getPosition();

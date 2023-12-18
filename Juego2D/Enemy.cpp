@@ -28,7 +28,7 @@ void Enemy::Load()
 		sf::Vector2f(size.x * sprite.getScale().x, size.y * sprite.getScale().y));
 }
 
-void Enemy::Update(float deltaTime)
+void Enemy::Update(double &deltaTime)
 {
 	boundingBox.setPosition(getPosition());
 }

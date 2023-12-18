@@ -3,6 +3,7 @@
 #include "Player.h"
 #include "Enemy.h"
 #include "Gmath.h"
+#include "Ginfo.h"
 
 int main() {
 	/*----------------------INITIALIZATION-START---------------------*/
@@ -16,6 +17,9 @@ int main() {
 	window.setFramerateLimit(240);
 	/*----------------------INITIALIZATION-END-----------------------*/
 
+	Ginfo frameRate;
+	frameRate.Initialize();
+
 	Player player;
 	player.Initialize();
 
@@ -23,19 +27,16 @@ int main() {
 	skeleton.Initialize();
 
 	/*----------------------LOAD-START------------------------------*/
+	frameRate.Load();
+	
 	player.Load();
 	skeleton.Load();
-	
 	/*----------------------LOAD-END--------------------------------*/
 
 	//----------------------Main game loop--------------------------
 	sf::Clock clock;
 
 	while (window.isOpen()) {
-
-		sf::Time deltaTimeCounter = clock.restart();
-		float deltaTime = deltaTimeCounter.asMilliseconds();
-		std::cout << deltaTime << "ms" << std::endl;
 
 		/*-----------------------Update-----------------------------*/
 		sf::Event event;
@@ -45,6 +46,13 @@ int main() {
 				window.close();
 			}
 		}
+
+		sf::Time deltaTimeCounter = clock.restart();
+		double deltaTime = deltaTimeCounter.asMicroseconds() / 1000.0f;
+
+		//FPS Counter-----
+		frameRate.Update(deltaTime);
+		//FPS Counter-----
 
 		sf::Vector2f mousePos = sf::Vector2f(sf::Mouse::getPosition(window));
 		skeleton.Update(deltaTime);
@@ -57,6 +65,7 @@ int main() {
 
 		player.Draw(window);
 		skeleton.Draw(window);
+		frameRate.Draw(window);
 
 		window.display();
 		/*-----------------------Draw-----------------------*/

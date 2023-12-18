@@ -9,8 +9,10 @@ private:
 	sf::Sprite sprite;
 
 	std::vector<sf::CircleShape> bullets;
-	float bulletSpeed = 2.0f;
-	float playerSpeed = 2.0f;
+	float bulletSpeed;
+	float playerSpeed;
+	double gunTimer{0};
+	float fireSpeed{ 5 }; //Bullets per second
 
 	sf::RectangleShape boundingBox;
 	
@@ -18,10 +20,13 @@ private:
 public:
 	void Initialize(); // <-- Called once
 	void Load(); // <-- Called once per app start
-	void Update(float deltaTime, Enemy& skeleton); // <-- Called once per frame
+	void Update(const float &deltaTime, Enemy& skeleton); // <-- Called once per frame
 	void Draw(sf::RenderWindow &window); // <-- Called once once per frame
 
 	sf::Vector2f getPosition();
 	sf::Sprite getSprite();
+
+	Player();
+	~Player();
 };
 

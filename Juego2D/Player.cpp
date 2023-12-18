@@ -2,6 +2,14 @@
 #include <iostream>
 #include "Gmath.h"
 
+Player::Player() :
+	bulletSpeed{ 1.0f }, playerSpeed{ 2.0f }
+{}
+
+Player::~Player()
+{}
+
+
 void Player::Initialize()
 {
 	boundingBox.setFillColor(sf::Color::Transparent);
@@ -20,7 +28,8 @@ void Player::Load()
 		std::cout << "Player texture loaded." << std::endl;
 		sprite.setTexture(texture);
 		sprite.setTextureRect(sf::IntRect(xIndex * size.x, yIndex * size.y, size.y, size.y));
-		sprite.scale(sf::Vector2f(1.0, 1.0));
+		sprite.scale(sf::Vector2f(3.0, 3.0));
+		sprite.setPosition(sf::Vector2f(850, 700.0));
 	}
 	else {
 		std::cout << "Player texture failed to load..." << std::endl;
@@ -28,7 +37,7 @@ void Player::Load()
 	boundingBox.setSize(sf::Vector2f(size.x * sprite.getScale().x, size.y * sprite.getScale().y));
 }
 
-void Player::Update(float deltaTime, Enemy &skeleton)
+void Player::Update(const float &deltaTime, Enemy &skeleton)
 {
 	//sf::Vector2f position = getPosition();
 
@@ -45,14 +54,21 @@ void Player::Update(float deltaTime, Enemy &skeleton)
 		sprite.setPosition(getPosition() + sf::Vector2f(0.1, 0) * playerSpeed * deltaTime);
 	}
 
-	if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
-		bullets.push_back(sf::CircleShape(15.0f));
+	gunTimer += deltaTime;
 
-		int i = bullets.size() - 1;
-		bullets[i].setPosition(getPosition());
-		std::cout << "Bullet number: " << i << " has been created." << std::endl;
+	if (gunTimer >= ( 1000.0f / fireSpeed )) {
+		if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+			bullets.push_back(sf::CircleShape(15.0f));
+
+			int i = bullets.size() - 1;
+			bullets[i].setPosition(getPosition());
+			bullets[i].setOutlineColor(sf::Color::Magenta);
+			bullets[i].setOutlineThickness(2);
+			std::cout << "Bullet number: " << i << " has been created." << std::endl;
+
+			gunTimer = 0;
+		}
 	}
-
 	for (int i{ 0 }; i < bullets.size(); i++) {
 		sf::Vector2f bulletDirection = skeleton.getPosition() - bullets[i].getPosition();
 		bulletDirection = Gmath::NormalizeVector(bulletDirection);

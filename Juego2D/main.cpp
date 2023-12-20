@@ -5,8 +5,10 @@
 #include "Gmath.h"
 #include "Ginfo.h"
 #include "Bullet.h"
+#include "Map.h"
 
 int main() {
+
 	/*----------------------INITIALIZATION-START---------------------*/
 	/*Settings*/
 	sf::ContextSettings settings;
@@ -15,9 +17,13 @@ int main() {
 	/*Window*/
 	int windowWidth = 1920, windowHeight = 1080;
 	sf::RenderWindow window(sf::VideoMode(windowWidth, windowHeight), "Juego RPG", sf::Style::Default, settings);
+	sf::Vector2u windowSize{ window.getSize().x, window.getSize().y };
 	window.setFramerateLimit(240);
 	/*----------------------INITIALIZATION-END-----------------------*/
 	sf::Mouse mouse;
+
+	Map map;
+	map.Initialize();
 
 	Bullet bullet;
 	bullet.Initialize();
@@ -33,6 +39,7 @@ int main() {
 
 	/*----------------------LOAD-START------------------------------*/
 	frameRate.Load();
+	map.Load();
 	
 	player.Load();
 	bullet.Load();
@@ -43,7 +50,6 @@ int main() {
 	sf::Clock clock;
 
 	while (window.isOpen()) {
-
 		/*-----------------------Update-----------------------------*/
 		sf::Event event;
 
@@ -53,7 +59,7 @@ int main() {
 			}
 		}
 
-		sf::Vector2f mousePos = sf::Vector2f(mouse.getPosition());
+		sf::Vector2f mousePos = sf::Vector2f(mouse.getPosition(window));
 
 		sf::Time deltaTimeCounter = clock.restart();
 		float deltaTime = deltaTimeCounter.asMicroseconds() / 1000.0f;
@@ -62,15 +68,17 @@ int main() {
 		frameRate.Update(deltaTime);
 		//FPS Counter-----
 
+		map.Update(deltaTime);
 		skeleton.Update(deltaTime);
-		player.Update(deltaTime, skeleton, mousePos);
-		bullet.Update(deltaTime, skeleton, mousePos, player);
+		player.Update(deltaTime, skeleton, mousePos, windowSize);
+		bullet.Update(deltaTime, skeleton, mousePos, player, windowSize);
 		
 		/*-----------------------Update-----------------------*/
 
 		/*-----------------------Draw-----------------------*/
-		window.clear(sf::Color::Black);
+		window.clear(sf::Color::Magenta);
 
+		map.Draw(window);
 		player.Draw(window);
 		bullet.Draw(window);
 		skeleton.Draw(window);

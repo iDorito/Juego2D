@@ -28,7 +28,8 @@ void Enemy::Load()
 		std::cout << "Failed to load enemy." << std::endl;
 	}
 
-	boundingBox.setSize(sf::Vector2f(size.x * sprite.getScale().x, size.y * sprite.getScale().y));
+
+	boundingBox.setSize(sf::Vector2f((size.x - 34.0f ) * sprite.getScale().x , (size.y - 18)  * sprite.getScale().y));
 
 	if (font.loadFromFile("Assets/Fonts/arial.ttf")) {
 		std::cout << "Arial.ttf - Font loaded!" << std::endl;
@@ -43,7 +44,7 @@ void Enemy::Update(float& deltaTime)
 {
 	if (health > 0) {
 		v_health.setPosition(getPosition() + sf::Vector2f(64.0f, 0.0f));
-		boundingBox.setPosition(getPosition());
+		boundingBox.setPosition(getPosition() + sf::Vector2f(50.0f, 46.0f));
 	}
 }
 
@@ -66,6 +67,11 @@ sf::Vector2f Enemy::getPosition()
 sf::Sprite Enemy::getSprite()
 {
 	return sprite;
+}
+
+sf::RectangleShape Enemy::getBoundingBox()
+{
+	return boundingBox;
 }
 
 int Enemy::getHealth()

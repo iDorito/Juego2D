@@ -22,6 +22,7 @@ public:
 
 	sf::Vector2f getPosition();
 	sf::Sprite getSprite();
+	sf::RectangleShape getBoundingBox();
 	int getHealth();
 
 	void reduceHealth(int dmg);

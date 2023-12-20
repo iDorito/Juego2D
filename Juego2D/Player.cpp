@@ -3,7 +3,7 @@
 #include "Gmath.h"
 
 Player::Player() :
-	playerSpeed{ 1.0f } {}
+	playerSpeed{ 3.0f } {}
 
 Player::~Player() {}
 
@@ -31,31 +31,41 @@ void Player::Load()
 		std::cout << "Player texture failed to load..." << std::endl;
 	}
 
-	boundingBox.setSize(sf::Vector2f(size.x * sprite.getScale().x, size.y * sprite.getScale().y));
+	boundingBox.setSize(sf::Vector2f((size.x - 34.0f) * sprite.getScale().x, (size.y - 18) * sprite.getScale().y));
+
 }
 
-void Player::Update(const float &deltaTime, Enemy &skeleton, sf::Vector2f &mousePos)
+void Player::Update(const float &deltaTime, Enemy &skeleton, sf::Vector2f &mousePos, sf::Vector2u windowSize)
 {
-	//sf::Vector2f position = getPosition();
+	
+	sf::FloatRect bbSize = boundingBox.getGlobalBounds();
+	sf::Vector2f movement(0.f, 0.f);
+	const sf::Vector2f directions[] = { sf::Vector2f(0, -1), sf::Vector2f(-1, 0), sf::Vector2f(0, 1), sf::Vector2f(1, 0) };
 
 	//--------------------------------------MOVEMENT--------------------------------------//
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
-		sprite.setPosition(getPosition() - sf::Vector2f(0, 1) * playerSpeed * deltaTime / 2.0f);
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::W) && bbSize.top >= 0) {
+		movement.y -= 1.f;
 	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
-		sprite.setPosition(getPosition() - sf::Vector2f(1, 0) * playerSpeed * deltaTime / 2.0f);
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::A) && bbSize.left >= 0) {
+		movement.x -= 1.f;
 	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) {
-		sprite.setPosition(getPosition() + sf::Vector2f(0, 1) * playerSpeed * deltaTime / 2.0f);
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::S) && (bbSize.top + bbSize.height) <= windowSize.y) 
+	{
+		movement.y += 1.f;
 	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
-		sprite.setPosition(getPosition() + sf::Vector2f(1, 0) * playerSpeed * deltaTime / 2.0f);
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::D) && (bbSize.left + bbSize.width) <= windowSize.x) 
+	{
+		movement.x += 1.f;
+	}
+	if (movement != sf::Vector2f(0.f, 0.f)) {
+		movement = playerSpeed * deltaTime / 2.0f * Gmath::NormalizeVector(movement);
+		sprite.setPosition(getPosition() + movement);
 	}
 	//--------------------------------------MOVEMENT--------------------------------------//
 
 	//-----------------------------------AABB--------------------------------------
-	boundingBox.setPosition(getPosition());
-	if (Gmath::CheckBoxCollition(sprite.getGlobalBounds(), skeleton.getSprite().getGlobalBounds()))
+	boundingBox.setPosition(getPosition() + sf::Vector2f(50.0f, 46.0f));
+	if (Gmath::CheckBoxCollition(boundingBox.getGlobalBounds(), skeleton.getBoundingBox().getGlobalBounds()))
 	{
 		std::cout << "Collition" << std::endl;
 	}
@@ -64,18 +74,21 @@ void Player::Update(const float &deltaTime, Enemy &skeleton, sf::Vector2f &mouse
 
 void Player::Draw(sf::RenderWindow &window)
 {
-
 	window.draw(getSprite());
 	window.draw(boundingBox);
 }
 
 sf::Vector2f Player::getPosition()
 {
-	sf::Vector2f position = sprite.getPosition();
-	return position;
+	return sf::Vector2f(sprite.getPosition());
 }
 
 sf::Sprite Player::getSprite()
 {
 	return sprite;
+}
+
+sf::RectangleShape Player::getBoundingBox()
+{
+	return boundingBox;
 }

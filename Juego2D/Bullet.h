@@ -16,7 +16,7 @@ private:
 public:
 	void Initialize(); // <-- Called once
 	void Load(); // <-- Called once per app start
-	void Update(const float& deltaTime, Enemy& skeleton, sf::Vector2f& mousePos, Player& player); // <-- Called once per frame
+	void Update(const float& deltaTime, Enemy& skeleton, sf::Vector2f& mousePos, Player& player, sf::Vector2u windowSize); // <-- Called once per frame
 	void Draw(sf::RenderWindow& window); // <-- Called once once per frame
 
 	Bullet();

@@ -8,7 +8,6 @@
 #include "Map.h"
 
 int main() {
-
 	/*----------------------INITIALIZATION-START---------------------*/
 	/*Settings*/
 	sf::ContextSettings settings;

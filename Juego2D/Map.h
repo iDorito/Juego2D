@@ -1,11 +1,12 @@
 #pragma once
 #include <SFML/Graphics.hpp>
+#include "Tile.h"
 
 class Map
 {
 private:
 	sf::Texture tilesheetTexture;
-	sf::Sprite tilesheetSprites[288];
+		Tile* tilesheetSprites;
 
 	sf::Vector2f size;
 
@@ -14,6 +15,14 @@ private:
 	float tileScale;
 	int totalTilesX;
 	int totalTilesY;
+	int totalTiles;
+
+	int mapPositions[6] = {
+		120, 121, 122,
+		144, 145, 146
+	};
+
+	sf::Sprite newSprites[6];
 public:
 	Map();
 	~Map();

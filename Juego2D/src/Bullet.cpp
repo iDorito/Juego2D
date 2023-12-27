@@ -18,7 +18,7 @@ void Bullet::Update(const float& deltaTime, Enemy& skeleton, sf::Vector2f& mouse
 	if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && gunTimer >= (1000.0f / fireSpeed)) {
 		bullets.push_back(sf::CircleShape(15.0f));
 
-		int i = bullets.size() - 1;
+		size_t i = bullets.size() - 1;
 		bullets[i].setPosition(player.getPosition() + sf::Vector2f(64.0f, 0.0f));
 		bullets[i].setOutlineColor(sf::Color::Magenta);
 		bullets[i].setOutlineThickness(2);

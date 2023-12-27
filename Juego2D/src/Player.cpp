@@ -13,12 +13,12 @@ void Player::Initialize()
 	boundingBox.setOutlineColor(sf::Color::Red);
 	boundingBox.setOutlineThickness(1);
 
-	size = sf::Vector2i(64, 64);
+	size = sf::Vector2i(32, 32);
 }
 
 void Player::Load()
 {
-	if (texture.loadFromFile("Assets/Player/Textures/spritesheet.png")) {
+	if (texture.loadFromFile("Assets/Player/Textures/ranger.png")) {
 		int xIndex = 0;
 		int yIndex = 0;
 		std::cout << "Player texture loaded." << std::endl;
@@ -31,7 +31,7 @@ void Player::Load()
 		std::cout << "Player texture failed to load..." << std::endl;
 	}
 
-	boundingBox.setSize(sf::Vector2f((size.x - 34.0f) * sprite.getScale().x, (size.y - 18) * sprite.getScale().y));
+	boundingBox.setSize(sf::Vector2f((size.x) * sprite.getScale().x, (size.y) * sprite.getScale().y));
 
 }
 
@@ -64,7 +64,7 @@ void Player::Update(const float &deltaTime, Enemy &skeleton, sf::Vector2f &mouse
 	//--------------------------------------MOVEMENT--------------------------------------//
 
 	//-----------------------------------AABB--------------------------------------
-	boundingBox.setPosition(getPosition() + sf::Vector2f(50.0f, 46.0f));
+	boundingBox.setPosition(getPosition());// + sf::Vector2f(50.0f, 46.0f));
 	if (Gmath::CheckBoxCollition(boundingBox.getGlobalBounds(), skeleton.getBoundingBox().getGlobalBounds()))
 	{
 		std::cout << "Collition" << std::endl;
@@ -78,17 +78,8 @@ void Player::Draw(sf::RenderWindow &window)
 	window.draw(boundingBox);
 }
 
-sf::Vector2f Player::getPosition()
-{
-	return sf::Vector2f(sprite.getPosition());
-}
+sf::Vector2f Player::getPosition() { return sf::Vector2f(sprite.getPosition());}
 
-sf::Sprite Player::getSprite()
-{
-	return sprite;
-}
+sf::Sprite Player::getSprite(){	return sprite; }
 
-sf::RectangleShape Player::getBoundingBox()
-{
-	return boundingBox;
-}
+sf::RectangleShape Player::getBoundingBox(){ return boundingBox;}

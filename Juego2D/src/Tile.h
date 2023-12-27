@@ -1,6 +1,5 @@
 #pragma once
-#include <SFML/Graphics.hpp>
-
+#include <SFML/Graphics.hpp>}
 
 struct Tile {
 	int id{ -1 };

@@ -6,6 +6,7 @@
 #include "Ginfo.h"
 #include "Bullet.h"
 #include "Map.h"
+#include "MapLoader.h"
 
 int main() {
 	/*----------------------INITIALIZATION-START---------------------*/
@@ -24,6 +25,8 @@ int main() {
 	Map map;
 	map.Initialize();
 
+
+
 	Bullet bullet;
 	bullet.Initialize();
 
@@ -39,7 +42,9 @@ int main() {
 	/*----------------------LOAD-START------------------------------*/
 	frameRate.Load();
 	map.Load();
-	
+
+
+
 	player.Load();
 	bullet.Load();
 	skeleton.Load();
@@ -52,7 +57,7 @@ int main() {
 		/*-----------------------Update-----------------------------*/
 		sf::Event event;
 
-		while (window.pollEvent(event)) {	
+		while (window.pollEvent(event)) {
 			if (event.type == sf::Event::Closed) {
 				window.close();
 			}
@@ -71,11 +76,11 @@ int main() {
 		skeleton.Update(deltaTime);
 		player.Update(deltaTime, skeleton, mousePos, windowSize);
 		bullet.Update(deltaTime, skeleton, mousePos, player, windowSize);
-		
+
 		/*-----------------------Update-----------------------*/
 
 		/*-----------------------Draw-----------------------*/
-		window.clear(sf::Color::Magenta);
+		window.clear(sf::Color::Transparent);
 
 		map.Draw(window);
 		player.Draw(window);

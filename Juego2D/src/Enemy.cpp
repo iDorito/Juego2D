@@ -64,20 +64,11 @@ sf::Vector2f Enemy::getPosition()
 	return position;
 }
 
-sf::Sprite Enemy::getSprite()
-{
-	return sprite;
-}
+sf::Sprite Enemy::getSprite(){ return sprite; }
 
-sf::RectangleShape Enemy::getBoundingBox()
-{
-	return boundingBox;
-}
+sf::RectangleShape Enemy::getBoundingBox(){ return boundingBox; }
 
-int Enemy::getHealth()
-{
-	return health;
-}
+int Enemy::getHealth(){return health;}
 
 void Enemy::reduceHealth(int dmg)
 {

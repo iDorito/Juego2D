@@ -3,7 +3,7 @@
 #include "Gmath.h"
 
 Player::Player() :
-	playerSpeed{ 3.0f } {}
+	playerSpeed{ 2.0f } {}
 
 Player::~Player() {}
 

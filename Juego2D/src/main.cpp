@@ -20,12 +20,14 @@ int main() {
 	sf::Vector2u windowSize{ window.getSize().x, window.getSize().y };
 	window.setFramerateLimit(240);
 	/*----------------------INITIALIZATION-END-----------------------*/
+	sf::Time deltaTimeCounter;
+	float deltaTime;
+
 	sf::Mouse mouse;
+	sf::Vector2f mousePos;
 
 	Map map;
 	map.Initialize();
-
-
 
 	Bullet bullet;
 	bullet.Initialize();
@@ -42,8 +44,6 @@ int main() {
 	/*----------------------LOAD-START------------------------------*/
 	frameRate.Load();
 	map.Load();
-
-
 
 	player.Load();
 	bullet.Load();
@@ -63,14 +63,12 @@ int main() {
 			}
 		}
 
-		sf::Vector2f mousePos = sf::Vector2f(mouse.getPosition(window));
+		mousePos = sf::Vector2f(mouse.getPosition(window));
 
-		sf::Time deltaTimeCounter = clock.restart();
-		float deltaTime = deltaTimeCounter.asMicroseconds() / 1000.0f;
-
-		//FPS Counter-----
-		frameRate.Update(deltaTime);
-		//FPS Counter-----
+		deltaTimeCounter = clock.restart();
+		deltaTime = deltaTimeCounter.asMicroseconds() / 1000.0f;
+		
+		frameRate.Update(deltaTime);//FPS Counter-----
 
 		map.Update(deltaTime);
 		skeleton.Update(deltaTime);
@@ -83,6 +81,7 @@ int main() {
 		window.clear(sf::Color::Transparent);
 
 		map.Draw(window);
+		
 		player.Draw(window);
 		bullet.Draw(window);
 		skeleton.Draw(window);

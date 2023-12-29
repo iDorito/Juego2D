@@ -2,11 +2,11 @@
 version=2
 tileshet=C:/Users/ricar/source/repos/Juego2D/Juego2D/Assets/World/Dungeon/Tilesheet.png
 name=Level 1
-mapWidth=3 
+mapWidth=4
 mapHeight=2
 tileWidth=16
 tileHeight=16
 scaleX=5
 scaleY=5
-dataSize=6
-data=120,121,122,144,145,146
+dataSize=8
+data=120,121,122,011,144,145,146,035
